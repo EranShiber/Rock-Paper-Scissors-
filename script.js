@@ -47,9 +47,9 @@ scissors.addEventListener("click", function () {
 // Paper btn ------------------
 paper.addEventListener("click", function () {
     
-    setTimeout(function() {h2.innerHTML = '3'}, 1000);
-    setTimeout(function() {h2.innerHTML = '2'}, 2000);
-    setTimeout(function() {h2.innerHTML = '1'}, 3000);
+    setTimeout(function() {h2.innerHTML = '3'}, 2000);
+    setTimeout(function() {h2.innerHTML = '2'}, 3000);
+    setTimeout(function() {h2.innerHTML = '1'}, 4000);
     setTimeout(function() {h2.innerHTML = 'Winner is:'}, 4000);
     setTimeout(function(){
     let compAnswer = Math.floor(Math.random() * 3) + 1;
