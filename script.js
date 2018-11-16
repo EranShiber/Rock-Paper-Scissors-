@@ -1,6 +1,9 @@
 const scissors = document.getElementById('s');// 1
 const paper = document.getElementById('p'); // 2
 const rock = document.getElementById('r'); // 3
+
+const choices = [0,scissors,paper,rock]
+
 const h2 = document.getElementById('h2');
 let userScoreNum = document.getElementById('userScoreNum');
 let compScoreNum = document.getElementById('compScoreNum');
@@ -8,124 +11,76 @@ let compScoreNum = document.getElementById('compScoreNum');
 compScoreNum.innerHTML = 0;
 userScoreNum.innerHTML = 0;
 
-// scissors btn 
+window.onload = function() {
+compScoreNum.innerHTML = localStorage.getItem('compScoreNum')|0
+userScoreNum.innerHTML = localStorage.getItem('userScoreNum')|0
+}
 
+
+// scissors btn 
 scissors.addEventListener("click", function () {
-    let counter = 4
+   startCounting(1)
+})
+// Paper btn ------------------
+paper.addEventListener("click", function () {
+    startCounting(2)
+})
+//  Rock btn
+rock.addEventListener("click", function () {
+    startCounting(3)
+})
+function startCounting(userChoice){
+    let counter = 2
     const interval = setInterval(function () {
         h2.innerHTML = counter;
         if(counter===0){
             clearInterval(interval);
-            runGame();
+            runGame(userChoice);
         }
         counter--
     }, 1000)
-})
-
-function runGame() {
+}
+function runGame(userChoice) {
     let compAnswer = Math.floor(Math.random() * 3) + 1;
-    let scissor = 1;
-    let papers = 2;
-    let rocks = 3;
-    switch(compAnswer) {
-    case scissor:
-    h2.innerHTML = "IT'S A TIE! "
-    s.classList.add('tie-glow')
-    setTimeout(function () { s.classList.remove('tie-glow') }, 2000);
-    break;
-    case papers:
-    userScoreNum.innerHTML++
-    compScoreNum.innerHTML--
-    h2.innerHTML = "You Won!"
-    s.classList.add('win-glow');
-    setTimeout(function () { s.classList.remove('win-glow') }, 2000);
-    r.classList.add('lose-glow');
-    setTimeout(function () { r.classList.remove('lose-glow') }, 2000)
-    break;  
-    case rocks:
-    userScoreNum.innerHTML--
-    compScoreNum.innerHTML++
-    h2.innerHTML = "You lost, Better luck next time!"
-    r.classList.add('win-glow')
-    setTimeout(function () { r.classList.remove('win-glow') }, 2000)
-    s.classList.add('lose-glow');
-    setTimeout(function () { s.classList.remove('lose-glow') }, 2000)
-    break;
-    default: 
-    console.log('error');
-    break;
-}
-   
-}
-// Paper btn ------------------
-paper.addEventListener("click", function () {
 
-    setTimeout(function () { h2.innerHTML = '3' }, 2000);
-    setTimeout(function () { h2.innerHTML = '2' }, 3000);
-    setTimeout(function () { h2.innerHTML = '1' }, 4000);
-    setTimeout(function () { h2.innerHTML = 'Winner is:' }, 4000);
-    setTimeout(function () {
-        let compAnswer = Math.floor(Math.random() * 3) + 1;
-        const scissor = 1;
-        const papers = 2;
-        const rocks = 3;
-        if (compAnswer === papers) {
-            h2.innerHTML = "Close one, IT'S A TIE! "
-            p.classList.add('tie-glow');
-            setTimeout(function () { p.classList.remove('tie-glow') }, 2000);
-        } else if (compAnswer === rocks) {
-            userScoreNum.innerHTML++;
-            compScoreNum.innerHTML--
-            h2.innerHTML = "You Won!"
-            p.classList.add('win-glow');
-            setTimeout(function () { p.classList.remove('win-glow') }, 2000);
-            r.classList.add('lose-glow');
-            setTimeout(function () { r.classList.remove('lose-glow') }, 2000);
-        } else if (compAnswer === scissor) {
-            userScoreNum.innerHTML--;
-            compScoreNum.innerHTML++;
-            h2.innerHTML = "You lost"
-            s.classList.add('win-glow');
-            setTimeout(function () { s.classList.remove('win-glow') }, 2000)
-            p.classList.add('lose-glow');
-            setTimeout(function () { p.classList.remove('lose-glow') }, 2000)
-        }
-    }, 5000)
-})
-//  Rock btn
-rock.addEventListener("click", function () {
-    setTimeout(function () { h2.innerHTML = '3' }, 1000);
-    setTimeout(function () { h2.innerHTML = '2' }, 2000);
-    setTimeout(function () { h2.innerHTML = '1' }, 3000);
-    setTimeout(function () { h2.innerHTML = 'Winner is:' }, 4000);
-    setTimeout(function () {
-        let compAnswer = Math.floor(Math.random() * 3) + 1;
-        let scissor = 1;
-        let papers = 2;
-        let rocks = 3;
-        if (compAnswer === rocks) {
-            h2.innerHTML = "IT'S A TIE!"
-            r.classList.add('tie-glow');
-            setTimeout(function () { r.classList.remove('tie-glow') }, 2000);
-        } else if (compAnswer === scissor) {
-            userScoreNum.innerHTML++;
-            compScoreNum.innerHTML--
-            h2.innerHTML = "You Won!"
-            s.classList.add('lost-glow');
-            setTimeout(function () { s.classList.remove('lose-glow') }, 2000)
-            r.classList.add('win-glow');
-            setTimeout(function () { r.classList.remove('win-glow') }, 2000);
-        } else if (compAnswer === papers) {
-            userScoreNum.innerHTML--;
-            compScoreNum.innerHTML++;
-            h2.innerHTML = "You lost";
-            r.classList.add('lose-glow');
-            setTimeout(function () { r.classList.remove('lose-glow') }, 2000)
-            p.classList.add('win-glow');
-            setTimeout(function () { p.classList.remove('win-glow') }, 2000)
-        }
-    }, 5000)
-})
+    let scissor = 1;
+    let pappers = 2;
+    let rocks = 3;
+
+    if (userChoice === compAnswer) {//tie
+        h2.innerHTML = "IT'S A TIE! "
+        choices[userChoice].classList.add('tie-glow')
+    setTimeout(function () { choices[userChoice].classList.remove('tie-glow') }, 2000);
+    }else if((userChoice===scissor && compAnswer===pappers)||
+       (userChoice===pappers && compAnswer===rocks)||
+       (userChoice===rocks && compAnswer===scissor)){//user win
+        h2.innerHTML = "You Won!"
+        updateScore('user')
+        paintWinnerAndLoser(choices[userChoice],choices[compAnswer])
+       } else {
+           h2.innerHTML = "Compuer Won.";
+           updateScore('comp')
+           paintWinnerAndLoser(choices[compAnswer], choices[userChoice] )
+       }
+
+}
+function paintWinnerAndLoser(winnerEle, loserEle) {
+    winnerEle.classList.add('win-glow')
+    setTimeout(function () {  winnerEle.classList.remove('win-glow') }, 2000);
+
+    loserEle.classList.add('lose-glow')
+    setTimeout(function () {  loserEle.classList.remove('lose-glow') }, 2000);
+}
+function updateScore(winner){
+    if(winner==="user"){
+        userScoreNum.innerHTML++
+        localStorage.setItem('userScoreNum',userScoreNum.innerHTML)
+    }else{
+       compScoreNum.innerHTML++ 
+       localStorage.setItem('compScoreNum',compScoreNum.innerHTML)
+    }
+
+}
 
 
 
